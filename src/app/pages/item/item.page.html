@@ -1,0 +1,28 @@
+<ion-content [fullscreen]="true">
+  <div class="flex">
+  <ion-card *ngFor="let item of items">
+    <div class="card-content">
+    <ion-card-content>
+      <ion-card-title class="custom-item-name" appyellow>{{item.attributes.item_name | uppercase}}</ion-card-title>
+      <div class="custom-item">
+        <div>{{item.attributes.type_id.data.attributes.type_name}}</div>
+        <div>{{item.attributes.quality_id.data.attributes.quality_name}}</div>
+      </div>
+    </ion-card-content>
+  </div>
+  <div class="button-container">
+    <ion-button fill="clear" color="secondary" [routerLink]="['/','item', 'update', item.id]">
+      <ion-icon name="create"></ion-icon>
+    </ion-button>
+    <ion-button fill="clear" color="danger" (click)="deleteItem(item.id)">
+      <ion-icon name="trash"></ion-icon>
+    </ion-button>
+  </div>
+  </ion-card>
+  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="danger" routerLink="/item-form">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,31 @@
+.demonic-toolbar {
+  background-color: #1a1a1a; /* Fondo oscuro */
+  color: #ff4500; /* Texto en color naranja intenso */
+  border-bottom: 2px solid #ff4500; /* Borde inferior en color naranja intenso */
+}
+
+.demonic-title {
+  font-family: 'Blackletter', sans-serif; /* Fuente gótica */
+}
+
+.demonic-content {
+  background-color: #1a1a1a; /* Fondo oscuro */
+  color: #ff4500; /* Texto en color naranja intenso */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin:3%; /* Ajusta según sea necesario */
+  }
+  
+  .button-container a {
+    margin: 0 10px; /* Ajusta el margen entre los botones según sea necesario */
+  }
+
+.demonic-button {
+  --border-color: #ff4500; /* Color del borde del botón */
+  --border-radius: 5px; /* Esquinas redondeadas del botón */
+  --color: #ff4500; /* Color del texto del botón */
+  --background: #1a1a1a; /* Color de fondo del botón */
+}

@@ -1,0 +1,16 @@
+.button-menu {
+    font-weight: bold;
+  }
+  
+  .active-button {
+    background-color: var(--ion-color-dark-contrast);
+    color: white;
+    font-weight: bold;
+  }
+  
+  .cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+  }

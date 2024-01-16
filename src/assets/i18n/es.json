@@ -1,0 +1,84 @@
+{
+  "login": {
+    "signup": "Registrarse",
+    "user": "Nombre de usuario o correo",
+    "password": "Contraseña",
+    "submit": "Acceder"
+  },
+  "register": {
+    "username": "Nombre de usuario",
+    "name": "Nombre",
+    "surname": "Apellidos",
+    "email": "Correo",
+    "password": "Contraseña",
+    "confirm": "Confirmar contraseña",
+    "signup": "Registrarse",
+    "login": "Loguearse"
+  },
+  "main": {
+    "home": "Inicio",
+    "build": "Composiciones",
+    "item": "Objetos",
+    "about": "Sobre mi",
+    "logout": "Desconectarse"
+  },
+  "formBuild": {
+    "create": "Crea una composición",
+    "name": "Nombre de la composición",
+    "class": "Clase",
+    "selectClass": "Selecciona una clase",
+    "item": "Objeto",
+    "selectItem": "Selecciona un objeto",
+    "saveC": "Crear",
+    "update": "Actualiza la composición",
+    "saveU": "Actualizar"
+  },
+  "formItem": {
+    "create": "Crea un item",
+    "name": "Nombre del item",
+    "class": "Tipo",
+    "selectClass": "Selecciona una tipo",
+    "item": "Calidad",
+    "selectItem": "Selecciona la calidad",
+    "saveC": "Crear",
+    "update": "Actualiza el item",
+    "saveU": "Actualizar"
+  },
+  "about": {
+    "content1": "Desarrollador Multiplataforma | LINUX | Angular & Ionic | HTML, CSS & JS | SQL",
+    "content2": "Con esta aplicación podrás crear tu propia composición del juego Diablo 4. Tendrás la posibilidad de crear tus propios objetos y agregarlos a tu composición.",
+    "more": "Ver más",
+    "close": "Cerrar"
+  },
+  "other": {
+    "input1": "El valor no puede superar los 20 caracteres.",
+    "input2": "Requiere al menos 8 caracteres, al menos un número, una letra minúscula y una letra mayúscula.",
+    "header": "Borrando",
+    "subheader": "Borrando el objeto",
+    "subheaderB": "Borrando la composición",
+    "message": "¿Seguro que quieres borrarlo?",
+    "okay": "Si",
+    "cancel": "No"
+  },
+  "user-card": {
+    "name": "Nombre"
+  },
+  "header": {
+    "user": {
+      "profile": "Mi perfil",
+      "signout": "Cerrar sesión"
+    },
+    "languages": {
+      "es": "Español",
+      "en": "Inglés"
+    }
+  },
+  "menu": {
+    "home": "Inicio",
+    "tasks": "Tareas",
+    "assignments": "Asignaciones",
+    "signout": "Cerrar sesión",
+    "profile": "Mi perfil",
+    "about": "Acerca de Tasks"
+  }
+}

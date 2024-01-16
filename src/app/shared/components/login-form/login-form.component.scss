@@ -1,0 +1,39 @@
+/* Estilo general para el formulario */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+
+  ion-label{
+    font-size: 1.5em;
+  }
+
+  /* Estilo para los inputs */
+  ion-input {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    --highlight-color-focused: #8b0000; /* Rojo oscuro para el borde enfocado */
+  }
+  
+  /* Estilo para los botones */
+  ion-button {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 15px;
+    --background: #570b0bde; /* Fondo rojo oscuro */
+    --color: #fff; /* Texto blanco */
+  }
+  
+  /* Estilo para el botón deshabilitado */
+  ion-button[disabled] {
+    --background: #b300003f; /* Fondo rojo un poco más claro para el botón deshabilitado */
+  }
+  
+  /* Hover en el botón */
+  ion-button:hover {
+    --background: #660000; /* Un tono más oscuro al pasar el ratón sobre el botón */
+  }

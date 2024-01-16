@@ -1,0 +1,14 @@
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="4" offset-md="4">
+        <app-item-form-add (onRegister)="onRegister($event)"></app-item-form-add>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-header>
+  <ion-title>
+    Creating a new Item
+  </ion-title>
+</ion-header>

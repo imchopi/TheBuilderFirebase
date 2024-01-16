@@ -1,0 +1,23 @@
+<ion-content>
+    <div class="flex">
+        <ion-card class="card-about">
+          <div class="card-content">
+            <ion-card-header class="card-header">
+              <div class="avatar-img">
+                <img alt="Avatar image" src="../../../assets/img/avatar.jpg" />
+              </div>
+            </ion-card-header>
+            <div>
+              <ion-card-title>Adrián Perogil Fernández</ion-card-title>
+              <ion-button
+                fill="outline"
+                color="danger"
+                (click)="openModal()"
+              >
+                {{'about.more' | translate}}
+              </ion-button>
+            </div>
+          </div>
+        </ion-card>
+    </div>
+</ion-content>

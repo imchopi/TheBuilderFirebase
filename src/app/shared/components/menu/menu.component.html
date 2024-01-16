@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="danger"></ion-menu-button>
+    </ion-buttons>
+      <ion-label slot="end">
+        <p class="nickname" *ngIf="user$ | async as user">
+          {{ user.nickname }}
+        </p>
+      </ion-label>
+    <ion-buttons slot="end">
+      <ion-button id="language" color="danger">
+        {{languageSelected | uppercase}}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-popover trigger="language" triggeraction="click" [dismissOnSelect]="true">
+    <ng-template>
+      <ion-content>
+        <ion-list>
+          <ion-item [disabled]="language == languageSelected" *ngFor="let language of languages" [button]="true" (click)="setLanguage(language)">
+            {{language | uppercase}}
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-popover>  
+</ion-header>
+
+<ion-menu contentId="main-content" swipeGesture="false" type="overlay">
+  <div class="cont">
+    <ion-button color="danger" class="button-menu" (click)="login()" *ngIf="currentPage === 'signup' || currentPage === 'login'">
+      <p>
+        Login
+      </p>
+    </ion-button>
+    <ion-button color="danger" class="button-menu" (click)="signUp()" *ngIf="currentPage === 'signup' || currentPage === 'login'" fill="clear">
+      <p>
+        {{'login.signup' | translate}}
+      </p>
+    </ion-button>
+    <ion-button color="danger" class="button-menu" (click)="home()" *ngIf="!(currentPage === 'signup' || currentPage === 'login')" fill="clear">
+      <p>
+        {{ 'main.home' | translate }}
+      </p>
+    </ion-button>
+    <ion-button color="danger" class="button-menu" (click)="build()" *ngIf="!(currentPage === 'signup' || currentPage === 'login')" fill="clear">
+      <p>
+        {{ 'main.build' | translate }}
+      </p>
+    </ion-button>
+    <ion-button color="danger" class="button-menu" (click)="item()" *ngIf="!(currentPage === 'signup' || currentPage === 'login')" fill="clear">
+      <p>
+        {{ 'main.item' | translate }}
+      </p>
+    </ion-button>
+    <ion-button color="danger"
+    class="button-menu" (click)="about()" *ngIf="!(currentPage === 'signup' || currentPage === 'login')" fill="clear">
+      <p>
+        {{ 'main.about' | translate }}
+      </p>
+    </ion-button>
+    <ion-button color="danger" class="button-menu" (click)="logout()" *ngIf="!(currentPage === 'signup' || currentPage === 'login')" fill="clear">
+      <p>
+        {{ 'main.logout' | translate }}
+      </p>
+    </ion-button>
+  </div>
+</ion-menu>

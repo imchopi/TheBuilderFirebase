@@ -1,0 +1,84 @@
+{
+  "login": {
+    "signup": "Sign up",
+    "user": "Username or Email",
+    "password": "Password",
+    "submit": "Login"
+  },
+  "register": {
+    "username": "Username",
+    "name": "Name",
+    "surname": "Surname",
+    "email": "Email",
+    "password": "Password",
+    "confirm": "Confirm Password",
+    "signup": "Sign up",
+    "login": "Login"
+  },
+  "main": {
+    "home": "Home",
+    "build": "Builds",
+    "item": "Items",
+    "about": "About me",
+    "logout": "Logout"
+  },
+  "formBuild": {
+    "create": "Create a Build",
+    "name": "Build name",
+    "class": "Class",
+    "selectClass": "Select a Class",
+    "item": "Item",
+    "selectItem": "Select a Item",
+    "saveC": "Save",
+    "update": "Update a Build",
+    "saveU": "Update"
+  },
+  "formItem": {
+    "create": "Create a Item",
+    "name": "Item name",
+    "class": "Type",
+    "selectClass": "Select a type",
+    "item": "Quality",
+    "selectItem": "Select a quality",
+    "saveC": "Save",
+    "update": "Update a Item",
+    "saveU": "Update"
+  },
+  "about": {
+    "content1": "Cross-platform Application Development | LINUX | Angular & Ionic | HTML, CSS & JS | SQL",
+    "content2": "With this application you will be able to create your own build of the Diablo 4 game. You will have the possibility of creating your own items and adding them to your build",
+    "more": "Read more",
+    "close": "Close"
+  },
+  "other": {
+    "input1": "The value cannot exceed 20 characters.",
+    "input2": "Requires at least 8 characters, at least one number, one lowercase letter and one uppercase letter.",
+    "header": "Removing",
+    "subheader": "Removing this item",
+    "subheaderB": "Removing this build",
+    "message": "Are you sure?", 
+    "okay": "Yes",
+    "cancel": "No"
+  },
+  "user-card": {
+    "name": "Name"
+  },
+  "header": {
+    "user": {
+      "profile": "My profile",
+      "signout": "Sign out"
+    },
+    "languages": {
+      "es": "Spanish",
+      "en": "English"
+    }
+  },
+  "menu": {
+    "home": "Home",
+    "tasks": "Tasks",
+    "assignments": "Assignments",
+    "signout": "Sign out",
+    "profile": "My profile",
+    "about": "About Tasks"
+  }
+}

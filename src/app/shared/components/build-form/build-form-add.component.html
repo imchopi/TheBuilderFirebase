@@ -1,0 +1,47 @@
+<ion-card class="custom-form">
+  <ion-card-header>
+    <ion-card-title>
+      {{mode ? ('formBuild.update' | translate) : ('formBuild.create' | translate)}}
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <form *ngIf="form" [formGroup]="form">
+      <ion-label position="stacked">
+        {{ mode ? ('formBuild.name' | translate) : ('formBuild.name' | translate)}}
+      </ion-label>
+      <app-form-control formControlName="buildname" (showMaxLengthErrorChange)="handleShowMaxLengthErrorChange($event)"></app-form-control><br><br>
+      <ion-label position="stacked">
+        {{ mode ? ('formBuild.class' | translate) : ('formBuild.class' | translate)}}
+      </ion-label>
+      <ion-item>
+        <ion-select formControlName="selectedClasses" placeholder="{{ 'formBuild.selectClass' | translate }}" aria-label="Select a Class">
+          <ion-select-option *ngFor="let oneClass of selectedClasses" [value]="oneClass.id">
+            {{ oneClass.attributes.name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-label position="stacked">
+        {{ mode ? ('formBuild.item' | translate) : ('formBuild.item' | translate)}}
+      </ion-label>
+      <ion-item>
+        <ion-select formControlName="selectedItems" placeholder="{{ 'formBuild.selectItem' | translate }}" aria-label="Select an Item">
+          <ion-select-option *ngFor="let item of selectedItems" [value]="item.id">
+            {{ item.attributes.item_name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-buttons>
+        <ion-back-button slot="start" defaultHref="/build-info"></ion-back-button>
+        <ion-button
+          fill="clear"
+          style="text-transform: none; margin-left: auto;"
+          [disabled]="!form.valid || showMaxLengthError"
+          (click)="mode ? updateBuild() : onRegisterBuild()"
+          type="submit"
+        >
+        {{ mode ? ('formBuild.saveU' | translate) : ('formBuild.saveC' | translate)}}
+        </ion-button>
+      </ion-buttons>
+    </form>
+  </ion-card-content>
+</ion-card>

@@ -1,0 +1,18 @@
+<form *ngIf="form" [formGroup]="form" (ngSubmit)="onRegister()">
+<ion-label>{{ 'register.username' | translate }}</ion-label>
+  <ion-input labelPlacement="stacked" formControlName="username" type="text"></ion-input>
+  <ion-label>{{ 'register.name' | translate }}</ion-label>
+  <ion-input labelPlacement="stacked" formControlName="name" type="text"></ion-input>
+  <ion-label>{{ 'register.surname' | translate }}</ion-label>
+  <ion-input labelPlacement="stacked" formControlName="surname" type="text"></ion-input>
+  <ion-label>{{ 'register.email' | translate }}</ion-label>
+  <ion-input labelPlacement="stacked" formControlName="email" type="email"></ion-input>
+  <ion-label>{{ 'register.password' | translate }}</ion-label>
+  <ion-input labelPlacement="stacked" formControlName="password" type="password"></ion-input>
+  <div *ngIf="form.get('password')?.hasError('passwordProto')">
+    {{'other.input2' | translate}}
+  </div>
+  <ion-label>{{ 'register.confirm' | translate }}</ion-label>
+  <ion-input labelPlacement="stacked" formControlName="confirmPassword" type="password"></ion-input>
+  <ion-button style="text-transform: none;" [disabled]="!form.valid" (click)="onRegister()" type="submit">{{ 'register.signup' | translate}}</ion-button>
+</form>

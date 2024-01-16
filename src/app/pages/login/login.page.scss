@@ -1,0 +1,35 @@
+/* Estilo para el contenedor */
+
+.container {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Estilo para la tarjeta */
+ion-card.custom-form {
+  width: 500px; /* Fondo oscuro para la tarjeta */
+  color: #fff; /* Texto blanco en la tarjeta */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilo para el encabezado de la tarjeta */
+ion-card-header {
+  background-color: #350505; /* Rojo oscuro para el encabezado de la tarjeta */
+  border-radius: 10px 10px 0 0;
+}
+
+/* Estilo para el contenido de la tarjeta */
+ion-card-content {
+  padding: 15px;
+}
+
+/* Estilo para el texto dentro de la tarjeta */
+ion-text {
+  margin: 10px;
+  font-weight: bold;
+  font-size: 2em;
+}

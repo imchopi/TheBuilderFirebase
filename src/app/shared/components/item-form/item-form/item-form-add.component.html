@@ -1,0 +1,65 @@
+<ion-card class="custom-form">
+  <ion-card-header>
+    <ion-card-title>
+      {{mode ? ('formItem.update' | translate) : ('formItem.create' | translate)}}
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <form *ngIf="form" [formGroup]="form">
+      <ion-label position="stacked">
+        {{ mode ? ('formItem.name' | translate) : ('formItem.name' | translate)}}
+      </ion-label>
+      <app-form-control
+        formControlName="itemname"
+        (showMaxLengthErrorChange)="handleShowMaxLengthErrorChange($event)"
+      ></app-form-control
+      ><br /><br />
+      <ion-label position="stacked">
+        {{ mode ? ('formItem.item' | translate) : ('formItem.item' | translate)}}
+      </ion-label>
+      <ion-item>
+        <ion-select
+          formControlName="selectedQualities"
+          placeholder="{{ 'formItem.selectItem' | translate }}"
+          aria-label="Select a Quality"
+        >
+          <ion-select-option
+            *ngFor="let oneQuality of selectedQualities"
+            [value]="oneQuality.id"
+          >
+            {{ oneQuality.attributes.quality_name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-label position="stacked">
+        {{ mode ? ('formItem.class' | translate) : ('formItem.class' | translate)}}
+      </ion-label>
+      <ion-item>
+        <ion-select
+          formControlName="selectedTypes"
+          placeholder="{{ 'formItem.selectClass' | translate }}"
+          aria-label="Select an Type"
+        >
+          <ion-select-option
+            *ngFor="let type of selectedTypes"
+            [value]="type.id"
+          >
+            {{ type.attributes.type_name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-buttons>
+        <ion-back-button slot="start" defaultHref="/item"></ion-back-button>
+        <ion-button
+          fill="clear"
+          style="text-transform: none; margin-left: auto;"
+          [disabled]="!form.valid || showMaxLengthError"
+          (click)="mode ? updateItem() : onRegisterItem()"
+          type="submit"
+        >
+        {{ mode ? ('formItem.saveU' | translate) : ('formItem.saveC' | translate)}}
+        </ion-button>
+      </ion-buttons>
+    </form>
+  </ion-card-content>
+</ion-card>
