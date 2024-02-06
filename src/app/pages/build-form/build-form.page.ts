@@ -6,7 +6,6 @@ import {
   Build,
   BuildPayload,
   Class,
-  Item,
 } from 'src/app/core/interfaces/build';
 import { BuildService } from 'src/app/core/services/build-info/build.service';
 @Component({
@@ -26,14 +25,14 @@ export class BuildFormPage implements OnInit {
   ngOnInit() {
   }
 
-  onRegister(build: BuildPayload) {
-    this.buildService.addBuild(build).subscribe({
-      next: (data) => {
-        this.router.navigate(['/build-info']);
-      },
-      error: (err) => {
-      },
-    });
+  async onRegister(build: BuildPayload) {
+    try {
+      await this.buildService.addBuild(build);
+      this.router.navigate(['/build-info']);
+    } catch (error) {
+      console.error('Error al agregar el build:', error);
+      // Manejar el error si es necesario
+    }
   }
   
 }

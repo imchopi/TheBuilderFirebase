@@ -3,12 +3,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import {
   Build,
+  BuildPayload,
   Class,
-  Item,
+  FullItem,
 } from 'src/app/core/interfaces/build';
 import { BuildService } from 'src/app/core/services/build-info/build.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserInfo } from 'src/app/core/interfaces/user';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { FirebaseService } from 'src/app/core/services/auth-firebase/auth-firebase.service';
 
 @Component({
   selector: 'app-build-form-add',
@@ -18,99 +21,72 @@ import { UserInfo } from 'src/app/core/interfaces/user';
 export class BuildFormAddComponent /*implements OnInit*/ {
   @Input() builds: Build | null = null;
   @Output() onCardClicked: EventEmitter<void> = new EventEmitter<void>();
-  /*@Output() onRegister = new EventEmitter<BuildPayload>();*/
+  @Output() onRegister = new EventEmitter<BuildPayload>();
 
   form: FormGroup;
   mode = false;
-  buildname: string | null = null;
+  buildName: string | null = null;
+  className: string | null = null;
+  itemName: string | null = null;
   selectedClasses: Class[] | null = null;
-  selectedItems: Item[] | null = null;
-  buildId: number | null = null;
-  user: UserInfo | null = null;
+  selectedItems: FullItem[] | null = null;
+  buildId: string | null = null;
+  user: UserInfo | undefined = undefined;
   showMaxLengthError: boolean = false;
 
-  /*@Input() set build(_build: Build | null) {
-    if (_build) {
-      this.form.controls['buildname'].setValue(_build.attributes.build_name);
-      this.form.controls['selectedClasses'].setValue(_build.attributes.class.data.id);
-      this.form.controls['selectedItems'].setValue(
-        _build.attributes.items.data.map((item) => item.id)
-      );
-    }
-  }*/
+  building: Build[] | null = null
 
   constructor(
     private formBuilder: FormBuilder,
     private buildService: BuildService,
-    private _modal: ModalController,
-    private activatedRoute: ActivatedRoute,
     private router: Router,
-    /*private auth: AuthService*/
   ) {
     this.form = this.formBuilder.group({
-      buildname: ['', Validators.required],
-      selectedClasses: [null, Validators.required],
-      selectedItems: [null, Validators.required],
-    });
+      buildName: [null, Validators.required],
+      className: [null, Validators.required],
+      itemName: [null, Validators.required]
+    })
   }
 
- /* ngOnInit() {
-    this.auth.me().subscribe({
-      next: (_) => {
-        this.user = _;
-        this.buildService.getAllBuildByUser(this?.user?.id).subscribe();
-      },
-    });
-    this.buildService.getClasses().subscribe((response) => {
-      this.selectedClasses = response;
-    });
+  async ngOnInit() {
+    const classes = await this.buildService.getClass()
+    this.selectedClasses = classes;
 
-    this.buildService.getItems().subscribe((response) => {
-      this.selectedItems = response;
-    });
-    this.activatedRoute.paramMap.subscribe((paramMap) => {
-      const buildIdParam = paramMap.get('buildId');
-      if (buildIdParam) {
-        this.mode = true;
-        this.buildId = Number(buildIdParam);
-        const buildId = Number(buildIdParam);
-        this.buildService.getBuildById(buildId).subscribe(
-          (res) => {
-            this.build = res;
-          },
-        );
-      }
-    });
-  }*/
+    const items = await this.buildService.getItems();
+    this.selectedItems = items;
+  }
 
- /* onRegisterBuild() {
+  async onRegisterBuild() {
     if (this.form && this.form.valid) {
       const buildData: BuildPayload = {
-        build_name: this.form.get('buildname')?.value,
-        class: this.form.get('selectedClasses')?.value,
-        items: this.form.get('selectedItems')?.value,
-        extended_user: this?.user?.id,
+        buildName: this.form.get('buildName')?.value,
+        class: this.form.get('className')?.value,
+        fullItem: this.form.get('itemName')?.value
       };
-
-      this.onRegister.emit(buildData);
+      console.log(buildData);
+      this.buildService.addBuild(buildData)
     }
-  }*/
+  }
 
-  /*updateBuild() {
+  async updateBuild() {
     if (this.form && this.form.valid && this.buildId !== null) {
-      const buildData: BuildPayload = {
-        build_name: this.form.get('buildname')?.value,
+      const buildData: Partial<Build> = {
+        buildName: this.form.get('buildname')?.value,
         class: this.form.get('selectedClasses')?.value,
-        items: this.form.get('selectedItems')?.value,
-        extended_user: this?.user?.id,
+        fullItem: this.form.get('selectedItems')?.value,
+        // Asumiendo que user es una propiedad de tu componente que contiene la información del usuario actual
+        userUid: this.user?.uid,
       };
-      this.buildService.updateBuild(this.buildId, buildData).subscribe({
-        next: (data) => {
-          this.router.navigate(['/build-info']);
-        },
-      });
+      
+      try {
+        await this.buildService.updateBuild(this.buildId, buildData);
+        this.router.navigate(['/build-info']);
+      } catch (error) {
+        console.error('Error al actualizar el build:', error);
+        // Manejar el error si es necesario
+      }
     }
-  }*/
+  }
 
   handleShowMaxLengthErrorChange(showMaxLengthError: boolean) {
     this.showMaxLengthError = showMaxLengthError;

@@ -12,11 +12,11 @@ export abstract class AuthService {
   protected _user = new BehaviorSubject<UserInfo|null>(null);
   public user$ = this._user.asObservable();
   
-  public abstract login(credentials:Object):Observable<UserInfo>;
+  public abstract login(credentials:Object):Promise<UserInfo>;
 
-  public abstract register(info:Object):Observable<UserInfo>;
+  public abstract register(info:Object):Promise<UserInfo>;
 
-  public abstract logout():Observable<void>;
+  public abstract logout():Promise<void>;
 
   public abstract me():Promise<any>;
 }

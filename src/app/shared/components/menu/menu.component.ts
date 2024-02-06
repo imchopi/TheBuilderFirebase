@@ -69,11 +69,16 @@ export class MenuComponent implements OnInit {
     this.navigateToPage('signup');
   }
 
-  logout() {
-    this._auth.logout().subscribe((_) => {
+  async logout() {
+    try {
+      await this._auth.logout();
       this.navigateToPage('login');
-      this._user.next(null)
-    });
+      this._user.next(null);
+    } catch (error) {
+      // Manejar el error en caso de que ocurra un problema durante el cierre de sesión
+      console.error('Error al cerrar sesión:', error);
+      // Aquí puedes mostrar un mensaje de error al usuario si es necesario
+    }
   }
 
   setLanguage(lang: string) {

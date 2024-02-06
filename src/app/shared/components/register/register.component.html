@@ -14,5 +14,5 @@
   </div>
   <ion-label>{{ 'register.confirm' | translate }}</ion-label>
   <ion-input labelPlacement="stacked" formControlName="confirmPassword" type="password"></ion-input>
-  <ion-button style="text-transform: none;" [disabled]="!form.valid" (click)="onRegister()" type="submit">{{ 'register.signup' | translate}}</ion-button>
+  <ion-button style="text-transform: none;" (click)="onRegister()" type="submit">{{ 'register.signup' | translate}}</ion-button>
 </form>

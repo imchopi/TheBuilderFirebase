@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { Build } from 'src/app/core/interfaces/build';
-import { User } from 'src/app/core/interfaces/user';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { UserInfo } from 'src/app/core/interfaces/user';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { BuildService } from 'src/app/core/services/build-info/build.service';
 import { AboutModalComponent } from 'src/app/shared/components/about-modal/about-modal.component';
 

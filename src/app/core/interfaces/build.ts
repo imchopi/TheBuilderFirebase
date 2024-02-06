@@ -2,8 +2,8 @@ export interface BuildPayload {
   userUid?: string,
   idBuild?: string;
   buildName: string;
-  className: string;
-  itemName: string;
+  class: string;
+  fullItem: string;
 }
 
 export interface Build {
@@ -15,11 +15,19 @@ export interface Build {
 }
 
 export interface FullItem {
-  userUid?: string
+  userUid?: string,
   idItem?: string,
   itemName: string,
   type: Type,
   quality: Quality,
+}
+
+export interface TestItem {
+  idQuality?: string;
+  idType?: string;
+  itemName: string,
+  typeName: string,
+  qualityName: string
 }
 
 export interface Type {

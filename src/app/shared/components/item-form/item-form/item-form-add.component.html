@@ -10,7 +10,7 @@
         {{ mode ? ('formItem.name' | translate) : ('formItem.name' | translate)}}
       </ion-label>
       <app-form-control
-        formControlName="itemname"
+        formControlName="itemName"
         (showMaxLengthErrorChange)="handleShowMaxLengthErrorChange($event)"
       ></app-form-control
       ><br /><br />
@@ -19,15 +19,15 @@
       </ion-label>
       <ion-item>
         <ion-select
-          formControlName="selectedQualities"
+          formControlName="qualityName"
           placeholder="{{ 'formItem.selectItem' | translate }}"
           aria-label="Select a Quality"
         >
           <ion-select-option
             *ngFor="let oneQuality of selectedQualities"
-            [value]="oneQuality.id"
+            [value]="oneQuality.qualityName"
           >
-            {{ oneQuality.attributes.quality_name }}
+            {{ oneQuality.qualityName }}
           </ion-select-option>
         </ion-select>
       </ion-item>
@@ -36,15 +36,15 @@
       </ion-label>
       <ion-item>
         <ion-select
-          formControlName="selectedTypes"
+          formControlName="typeName"
           placeholder="{{ 'formItem.selectClass' | translate }}"
           aria-label="Select an Type"
         >
           <ion-select-option
             *ngFor="let type of selectedTypes"
-            [value]="type.id"
+            [value]="type.typeName"
           >
-            {{ type.attributes.type_name }}
+            {{ type.typeName }}
           </ion-select-option>
         </ion-select>
       </ion-item>

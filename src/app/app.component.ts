@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomTranslateService } from './core/services/translate/custom-translate.service';
 import { AuthService } from './core/services/auth.service';
+import { FirebaseService } from './core/services/auth-firebase/auth-firebase.service';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,7 @@ import { AuthService } from './core/services/auth.service';
 export class AppComponent{
   
   constructor(
-    private _auth: AuthService,
+    private _auth: FirebaseService,
     private router: Router,
     public translate: CustomTranslateService,
     ) {

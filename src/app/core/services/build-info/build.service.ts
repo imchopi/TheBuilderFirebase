@@ -6,6 +6,7 @@ import {
   Class,
   FullItem,
   Quality,
+  TestItem,
   Type,
 } from '../../interfaces/build';
 import {
@@ -22,7 +23,14 @@ import {
   where,
 } from 'firebase/firestore';
 import { FirebaseApp, initializeApp } from 'firebase/app';
-import { getAuth, Auth, onAuthStateChanged, signInWithEmailAndPassword, UserCredential, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  Auth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  UserCredential,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
 import { UserInfo } from '../../interfaces/user';
 
 @Injectable({
@@ -44,7 +52,7 @@ export class BuildService {
   }
 
   async getAll(): Promise<Build[]> {
-    const fullBuild = collection(this._db, 'build');
+    const fullBuild = collection(this._db, 'buildRegister');
     const fullBuildSnapshot = await getDocs(fullBuild);
     const builds: Build[] = fullBuildSnapshot.docs.map((doc) => {
       const data = doc.data();
@@ -67,12 +75,13 @@ export class BuildService {
           type: {
             idType: data['idType'],
             typeName: data['typeName'],
-          },
+          }
         },
       };
+      console.log("buildData" + buildData);
       return buildData;
     });
-
+    console.log("builds" + builds);
     return builds;
   }
 
@@ -107,17 +116,10 @@ export class BuildService {
     });
   }
 
-  /*getBuildById(buildId: number): Observable<Build> {
-    return this.apiSvc
-      .get(
-        `/build-infos/${buildId}?populate=build,items,items.quality_id,items.type_id,class,class.class_img`
-      )
-      .pipe(map((response: any) => response.data));
-  }*/
   async getItems(): Promise<FullItem[]> {
-    const fullItem = collection(this._db, 'items');
-    const fullItemSnapshot = await getDocs(fullItem);
-    const items: FullItem[] = fullItemSnapshot.docs.map((doc) => {
+    const item = collection(this._db, 'items');
+    const itemSnapshot = await getDocs(item);
+    const items: FullItem[] = itemSnapshot.docs.map((doc) => {
       const data = doc.data();
       const itemData: FullItem = {
         idItem: data['idItem'],
@@ -129,15 +131,15 @@ export class BuildService {
         type: {
           idType: data['idType'],
           typeName: data['typeName'],
-        },
-      };
+        }
+      }
       return itemData;
     });
     return items;
   }
 
-  async getBuildById(buildId: number): Promise<Build | null> {
-    const buildRef = doc(this._db, 'buildRegister')
+  async getBuildById(idBuild: string): Promise<Build | null> {
+    const buildRef = doc(this._db, 'buildRegister');
     try {
       const buildDoc = await getDoc(buildRef);
 
@@ -162,7 +164,7 @@ export class BuildService {
             type: {
               idType: data['idType'],
               typeName: data['typeName'],
-            },
+            }
           },
         };
         return buildData;
@@ -194,8 +196,8 @@ export class BuildService {
           type: {
             idType: data['idType'],
             typeName: data['typeName'],
-          },
-        };
+          }
+        }
         return itemData;
       } else {
         console.log('No se encontró un elemento con el ID proporcionado.');
@@ -250,18 +252,26 @@ export class BuildService {
     return qualities;
   }
 
-  async createBuild(build: BuildPayload) {
-    const auth = getAuth()
-    const user = auth.currentUser
+  async addBuild(build: BuildPayload) {
+    const auth = getAuth();
+    const user = auth.currentUser;
     const buildWithUserUid = { ...build, userUid: user?.uid };
-    const docBuild = await addDoc(collection(this._db, 'buildRegister'), buildWithUserUid);
+    const docBuild = await addDoc(collection(this._db, 'buildRegister'),buildWithUserUid);
   }
 
-  async addItem(item: FullItem) {
-    const auth = getAuth()
-    const user = auth.currentUser
-    const itemWithUserUid = { ...item, userUid: user?.uid };
-    const docItem = await addDoc(collection(this._db, 'items'), itemWithUserUid);
+  async addItem(item: TestItem) {
+    const newItem: TestItem = {
+      itemName: item.itemName,
+      qualityName: item.qualityName,
+      typeName: item.typeName
+    }
+    console.log(newItem);
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const docItem = await addDoc(
+      collection(this._db, 'items'),
+      newItem
+    );
   }
 
   async updateBuild(

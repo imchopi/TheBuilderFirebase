@@ -5,27 +5,27 @@
         <ion-card-header class="card-header">
           <div class="avatar-img">
             <img
-              [src]="build.attributes.class.data.attributes.class_img.data.attributes.url"
+              [src]="build.class.classImage"
               alt="Class Image"
             />
           </div>
         </ion-card-header>
       </div>
       <ion-card-content>
-        <ion-card-title>{{build.attributes.build_name}}</ion-card-title>
+        <ion-card-title>{{build.buildName}}</ion-card-title>
         <ion-card-title class="class"
-          >{{build.attributes.class.data.attributes.name | uppercase}}</ion-card-title
+          >{{build.class.className | uppercase}}</ion-card-title
         >
-        <div class="custom-item" *ngFor="let item of build.attributes.items.data">
-          <p class="custom-item-name" appyellow>{{item.attributes.item_name | uppercase}}</p>
-          <p>{{item.attributes.type_id.data.attributes.type_name}}</p>
-          <p>{{item.attributes.quality_id.data.attributes.quality_name}}</p>
+        <div class="custom-item">
+          <p class="custom-item-name" appyellow>{{build.fullItem.itemName | uppercase}}</p>
+          <p>{{build.fullItem.type.typeName}}</p>
+          <p>{{build.fullItem.quality.qualityName}}</p>
         </div>
         <div class="button-container">
-          <ion-button fill="clear" color="secondary" [routerLink]="['/','build', 'update', build.id]">
+          <ion-button fill="clear" color="secondary" [routerLink]="['/','build', 'update', build.idBuild]">
             <ion-icon name="create"></ion-icon>
           </ion-button>
-          <ion-button fill="clear" color="danger" (click)="deleteBuild(build.id)">
+          <ion-button fill="clear" color="danger" (click)="deleteBuild(build.idBuild)">
             <ion-icon name="trash"></ion-icon>
           </ion-button>
         </div>

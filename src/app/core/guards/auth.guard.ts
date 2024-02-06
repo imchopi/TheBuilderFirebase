@@ -15,13 +15,18 @@ import { AuthService } from '../services/auth.service';
 export class AuthGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
-  canActivate(): Observable<boolean | UrlTree> {
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> {
     return this.auth.isLogged$.pipe(
-      map(logged => !!logged), // Convertir valores nulos a false
-      tap((logged) => {
+      map((logged) => {
         if (!logged) {
-          this.router.navigate(['/login']);
+          // Si el usuario no está autenticado, redirigir a la página de inicio de sesión
+          return this.router.createUrlTree(['/login']);
         }
+        // Si el usuario está autenticado, permitir el acceso a la ruta protegida
+        return true;
       })
     );
   }

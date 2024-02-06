@@ -1,17 +1,8 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  Type,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import {
-  Item,
-} from 'src/app/core/interfaces/build';
+import { FullItem, Quality, TestItem, Type } from 'src/app/core/interfaces/build';
 import { BuildService } from 'src/app/core/services/build-info/build.service';
 
 @Component({
@@ -20,95 +11,66 @@ import { BuildService } from 'src/app/core/services/build-info/build.service';
   styleUrls: ['./item-form-add.component.scss'],
 })
 export class ItemFormAddComponent /*implements OnInit*/ {
-  @Input() items: Item | null = null;
-  /*@Output() onRegister = new EventEmitter<ItemPayload>();*/
+  @Input() items: FullItem | null = null;
+  @Output() onRegister = new EventEmitter<TestItem>();
 
   form: FormGroup;
   mode = false;
-  itemname: string | null = null;
-  infoItem: Item[] | null = null;
- /*selectedQualities: Qualities[] | null = null;
-  selectedTypes: Types[] | null = null;*/
-  itemId: number | null = null;
-  showMaxLengthError: boolean = false;
+  
+  itemName: string | null = null;
+  typeName: string | null = null;
+  qualityName: string | null = null;
 
-  /*@Input() set item(_item: Item | null) {
-    if (_item) {
-      this.form.controls['itemname'].setValue(_item.attributes.item_name);
-      this.form.controls['selectedQualities'].setValue(
-        _item.attributes.quality_id.data.id
-      );
-      this.form.controls['selectedTypes'].setValue(
-        _item.attributes.type_id.data.id
-      );
-    }
-  }*/
+  selectedQualities: Quality[] | null = null;
+  selectedTypes: Type[] | null = null;
+  itemId: string | null = null;
+  showMaxLengthError: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private buildService: BuildService,
-    private _modal: ModalController,
-    private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
     this.form = this.formBuilder.group({
-      itemname: ['', Validators.required],
-      selectedQualities: [null, Validators.required],
-      selectedTypes: [null, Validators.required],
+      itemName: ['', Validators.required],
+      typeName: ['', Validators.required],
+      qualityName: ['', Validators.required],
     });
   }
 
-  /*ngOnInit() {
-    this.buildService.getQualities().subscribe((response) => {
-      this.selectedQualities = response;
-    });
-    this.buildService.getTypes().subscribe((response) => {
-      this.selectedTypes = response;
-    });
-    this.activatedRoute.paramMap.subscribe((paramMap) => {
-      const itemIdParam = paramMap.get('itemId');
-      if (itemIdParam) {
-        this.mode = true;
-        this.itemId = Number(itemIdParam);
-        const itemId = Number(itemIdParam);
-        this.buildService.getItemById(itemId).subscribe(
-          (res) => {
-            this.item = res;
-          },
-        );
-      }
-    });
-  }*/
+  async ngOnInit() {
+    this.selectedQualities = await this.buildService.getQualities();
+    this.selectedTypes = await this.buildService.getTypes();
+  }
 
-  /*onRegisterItem() {
+  onRegisterItem() {
     if (this.form && this.form.valid) {
-      const itemData: ItemPayload = {
-        item_name: this.form.get('itemname')?.value,
-        quality_id: this.form.get('selectedQualities')?.value,
-        type_id: this.form.get('selectedTypes')?.value,
+      const itemData: TestItem = {
+        itemName: this.form.get('itemName')?.value,
+        qualityName: this.form.get('typeName')?.value,
+        typeName: this.form.get('qualityName')?.value,
       };
       this.onRegister.emit(itemData);
     }
-  }*/
+  }
 
-  /*updateItem() {
-    if (this.form && this.form.valid && this.itemId !== null) {
-      const itemData: ItemPayload = {
-        item_name: this.form.get('itemname')?.value,
-        quality_id: this.form.get('selectedQualities')?.value,
-        type_id: this.form.get('selectedTypes')?.value,
-      };
+  async updateItem() {
+    try {
+      if (this.form && this.form.valid && this.itemId !== null) {
+        const itemData: FullItem = {
+          itemName: this.form.get('itemname')?.value,
+          quality: this.form.get('selectedQualities')?.value,
+          type: this.form.get('selectedTypes')?.value,
+        };
 
-      this.buildService.updateItem(this.itemId, itemData).subscribe(
-        (res) => {
-          this.router.navigate(['/item']);
-        },
-        (err) => {
-          console.error('Error al actualizar el item:', err);
-        }
-      );
+        await this.buildService.updateItem(this.itemId, itemData);
+        this.router.navigate(['/item']);
+      }
+    } catch (error) {
+      console.error('Error al actualizar el item:', error);
+      // Manejar el error si es necesario
     }
-  }*/
+  }
 
   handleShowMaxLengthErrorChange(showMaxLengthError: boolean) {
     this.showMaxLengthError = showMaxLengthError;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ItemPayload } from 'src/app/core/interfaces/build';
+import { FullItem, TestItem } from 'src/app/core/interfaces/build';
 import { BuildService } from 'src/app/core/services/build-info/build.service';
 
 @Component({
@@ -18,11 +18,15 @@ export class ItemFormPage implements OnInit {
   ngOnInit() {
   }
 
-  onRegister(item: ItemPayload) {
-    this.buildService.addItem(item).subscribe({
-      next: (data) => {
-        this.router.navigate(['/item']);
-      },
-    });
+  async onRegister(item: TestItem) {
+    try {
+      const data = await this.buildService.addItem(item);
+      console.log("Data de onRegister: " + item.typeName);
+      
+      this.router.navigate(['/item']);
+    } catch (error) {
+      console.error('Error al agregar el item:', error);
+      // Manejar el error si es necesario
+    }
   }
 }

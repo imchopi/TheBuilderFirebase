@@ -3,18 +3,18 @@
   <ion-card *ngFor="let item of items">
     <div class="card-content">
     <ion-card-content>
-      <ion-card-title class="custom-item-name" appyellow>{{item.attributes.item_name | uppercase}}</ion-card-title>
+      <ion-card-title class="custom-item-name" appyellow>{{item.itemName | uppercase}}</ion-card-title>
       <div class="custom-item">
-        <div>{{item.attributes.type_id.data.attributes.type_name}}</div>
-        <div>{{item.attributes.quality_id.data.attributes.quality_name}}</div>
+        <div>{{item.quality.qualityName}}</div>
+        <div>{{item.type.typeName}}</div>
       </div>
     </ion-card-content>
   </div>
   <div class="button-container">
-    <ion-button fill="clear" color="secondary" [routerLink]="['/','item', 'update', item.id]">
+    <ion-button fill="clear" color="secondary" [routerLink]="['/','item', 'update', item.idItem]">
       <ion-icon name="create"></ion-icon>
     </ion-button>
-    <ion-button fill="clear" color="danger" (click)="deleteItem(item.id)">
+    <ion-button fill="clear" color="danger" (click)="deleteItem(item?.idItem)">
       <ion-icon name="trash"></ion-icon>
     </ion-button>
   </div>
