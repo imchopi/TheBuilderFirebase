@@ -11,9 +11,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import {
   Item,
-  ItemPayload,
-  Qualities,
-  Types,
 } from 'src/app/core/interfaces/build';
 import { BuildService } from 'src/app/core/services/build-info/build.service';
 
@@ -22,20 +19,20 @@ import { BuildService } from 'src/app/core/services/build-info/build.service';
   templateUrl: './item-form-add.component.html',
   styleUrls: ['./item-form-add.component.scss'],
 })
-export class ItemFormAddComponent implements OnInit {
+export class ItemFormAddComponent /*implements OnInit*/ {
   @Input() items: Item | null = null;
-  @Output() onRegister = new EventEmitter<ItemPayload>();
+  /*@Output() onRegister = new EventEmitter<ItemPayload>();*/
 
   form: FormGroup;
   mode = false;
   itemname: string | null = null;
   infoItem: Item[] | null = null;
-  selectedQualities: Qualities[] | null = null;
-  selectedTypes: Types[] | null = null;
+ /*selectedQualities: Qualities[] | null = null;
+  selectedTypes: Types[] | null = null;*/
   itemId: number | null = null;
   showMaxLengthError: boolean = false;
 
-  @Input() set item(_item: Item | null) {
+  /*@Input() set item(_item: Item | null) {
     if (_item) {
       this.form.controls['itemname'].setValue(_item.attributes.item_name);
       this.form.controls['selectedQualities'].setValue(
@@ -45,7 +42,7 @@ export class ItemFormAddComponent implements OnInit {
         _item.attributes.type_id.data.id
       );
     }
-  }
+  }*/
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,7 +58,7 @@ export class ItemFormAddComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  /*ngOnInit() {
     this.buildService.getQualities().subscribe((response) => {
       this.selectedQualities = response;
     });
@@ -81,9 +78,9 @@ export class ItemFormAddComponent implements OnInit {
         );
       }
     });
-  }
+  }*/
 
-  onRegisterItem() {
+  /*onRegisterItem() {
     if (this.form && this.form.valid) {
       const itemData: ItemPayload = {
         item_name: this.form.get('itemname')?.value,
@@ -92,9 +89,9 @@ export class ItemFormAddComponent implements OnInit {
       };
       this.onRegister.emit(itemData);
     }
-  }
+  }*/
 
-  updateItem() {
+  /*updateItem() {
     if (this.form && this.form.valid && this.itemId !== null) {
       const itemData: ItemPayload = {
         item_name: this.form.get('itemname')?.value,
@@ -111,7 +108,7 @@ export class ItemFormAddComponent implements OnInit {
         }
       );
     }
-  }
+  }*/
 
   handleShowMaxLengthErrorChange(showMaxLengthError: boolean) {
     this.showMaxLengthError = showMaxLengthError;

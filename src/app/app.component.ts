@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './core/services/auth/auth.service';
 import { Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
-import { User } from './core/interfaces/user';
-import { ApiService } from './core/services/api/api.service';
 import { CustomTranslateService } from './core/services/translate/custom-translate.service';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -18,15 +15,21 @@ export class AppComponent{
     private router: Router,
     public translate: CustomTranslateService,
     ) {
-    this._auth.isLogged$.subscribe((logged) => {
-      if (logged) {
-        this._auth.me().subscribe((user) => {
-          this.router.navigate(['/home'])
-        });
-      } else {
-        this.router.navigate(['/loading'])
+      this.checkAuthentication();
+    }
+    
+    async checkAuthentication() {
+      try {
+        const user = await this._auth.me();
+        if (user) {
+          this.router.navigate(['/home']);
+        } else {
+          this.router.navigate(['/loading']);
+        }
+      } catch (error) {
+        console.error('Error al verificar la autenticación:', error);
+        // Aquí puedes manejar el error si es necesario
       }
-    });
-  }
+    }
 
 }

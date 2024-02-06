@@ -1,7 +1,7 @@
-export interface User {
-  id: number;
+export interface UserInfo {
+  uid: string;
   name: string;
   surname: string;
   nickname: string;
-  picture?:string
+  picture?: string;
 }

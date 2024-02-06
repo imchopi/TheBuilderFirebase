@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
-import { User } from 'src/app/core/interfaces/user';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { UserInfo } from 'src/app/core/interfaces/user';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -12,28 +12,27 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
-  @Input() nickname: User | string = 'Chopito';
+  @Input() nickname: UserInfo | string = 'Chopito';
   @Input() languages: string[] = ['es', 'en'];
   @Input() languageSelected: string = 'es';
 
   currentPage: string = 'login';
 
-  private _user = new BehaviorSubject<User | null>(null);
+  private _user = new BehaviorSubject<UserInfo | null>(null);
   public user$ = this._user.asObservable();
 
   constructor(
+    private _auth: AuthService,
     private _menu: MenuController,
     private _router: Router,
-    private _auth: AuthService,
     private _lang: TranslateService
   ) {}
   ngOnInit(): void {
-    this._auth.isLogged$.subscribe((logged) => {
+    this._auth.isLogged$.subscribe(async (logged) => {
       if (logged) {
-        this._auth.me().subscribe((user) => {
-          this._user.next(user);
-        });
-        this.home()
+        const user = await this._auth.me();
+        this._user.next(user);
+        this.home();
       }
     });
 

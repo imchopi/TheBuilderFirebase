@@ -3,24 +3,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import {
   Build,
-  BuildPayload,
   Class,
   Item,
 } from 'src/app/core/interfaces/build';
 import { BuildService } from 'src/app/core/services/build-info/build.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { User } from 'src/app/core/interfaces/user';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { UserInfo } from 'src/app/core/interfaces/user';
 
 @Component({
   selector: 'app-build-form-add',
   templateUrl: './build-form-add.component.html',
   styleUrls: ['./build-form-add.component.scss'],
 })
-export class BuildFormAddComponent implements OnInit {
+export class BuildFormAddComponent /*implements OnInit*/ {
   @Input() builds: Build | null = null;
   @Output() onCardClicked: EventEmitter<void> = new EventEmitter<void>();
-  @Output() onRegister = new EventEmitter<BuildPayload>();
+  /*@Output() onRegister = new EventEmitter<BuildPayload>();*/
 
   form: FormGroup;
   mode = false;
@@ -28,10 +26,10 @@ export class BuildFormAddComponent implements OnInit {
   selectedClasses: Class[] | null = null;
   selectedItems: Item[] | null = null;
   buildId: number | null = null;
-  user: User | null = null;
+  user: UserInfo | null = null;
   showMaxLengthError: boolean = false;
 
-  @Input() set build(_build: Build | null) {
+  /*@Input() set build(_build: Build | null) {
     if (_build) {
       this.form.controls['buildname'].setValue(_build.attributes.build_name);
       this.form.controls['selectedClasses'].setValue(_build.attributes.class.data.id);
@@ -39,7 +37,7 @@ export class BuildFormAddComponent implements OnInit {
         _build.attributes.items.data.map((item) => item.id)
       );
     }
-  }
+  }*/
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,7 +45,7 @@ export class BuildFormAddComponent implements OnInit {
     private _modal: ModalController,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private auth: AuthService
+    /*private auth: AuthService*/
   ) {
     this.form = this.formBuilder.group({
       buildname: ['', Validators.required],
@@ -56,7 +54,7 @@ export class BuildFormAddComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+ /* ngOnInit() {
     this.auth.me().subscribe({
       next: (_) => {
         this.user = _;
@@ -83,9 +81,9 @@ export class BuildFormAddComponent implements OnInit {
         );
       }
     });
-  }
+  }*/
 
-  onRegisterBuild() {
+ /* onRegisterBuild() {
     if (this.form && this.form.valid) {
       const buildData: BuildPayload = {
         build_name: this.form.get('buildname')?.value,
@@ -96,9 +94,9 @@ export class BuildFormAddComponent implements OnInit {
 
       this.onRegister.emit(buildData);
     }
-  }
+  }*/
 
-  updateBuild() {
+  /*updateBuild() {
     if (this.form && this.form.valid && this.buildId !== null) {
       const buildData: BuildPayload = {
         build_name: this.form.get('buildname')?.value,
@@ -112,7 +110,7 @@ export class BuildFormAddComponent implements OnInit {
         },
       });
     }
-  }
+  }*/
 
   handleShowMaxLengthErrorChange(showMaxLengthError: boolean) {
     this.showMaxLengthError = showMaxLengthError;

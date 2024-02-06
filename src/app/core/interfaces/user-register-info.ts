@@ -1,4 +1,5 @@
 export interface UserRegisterInfo {
+  uid: string;
   username: string;
   email: string;
   name: string;
