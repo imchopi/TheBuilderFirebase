@@ -18,10 +18,10 @@ export class ItemFormPage implements OnInit {
   ngOnInit() {
   }
 
-  async onRegister(item: TestItem) {
+  async onRegister(item: FullItem) {
     try {
       const data = await this.buildService.addItem(item);
-      console.log("Data de onRegister: " + item.typeName);
+      console.log("Data de onRegister: " + item.itemName);
       
       this.router.navigate(['/item']);
     } catch (error) {

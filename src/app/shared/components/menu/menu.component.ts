@@ -2,8 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { getAuth } from 'firebase/auth';
 import { BehaviorSubject } from 'rxjs';
 import { UserInfo } from 'src/app/core/interfaces/user';
+import { FirebaseService } from 'src/app/core/services/auth-firebase/auth-firebase.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
@@ -22,20 +24,25 @@ export class MenuComponent implements OnInit {
   public user$ = this._user.asObservable();
 
   constructor(
-    private _auth: AuthService,
+    private _auth: FirebaseService,
     private _menu: MenuController,
     private _router: Router,
     private _lang: TranslateService
   ) {}
-  ngOnInit(): void {
-    this._auth.isLogged$.subscribe(async (logged) => {
-      if (logged) {
+  ngOnInit() {
+    getAuth().onAuthStateChanged(async (user) => {
+      if (user) {
         const user = await this._auth.me();
         this._user.next(user);
-        this.home();
+        this.home()
+        console.log(this.currentPage);
+        
+        console.log("CONDUMIO" + user);
+        console.log("CONDUMIO ID" + user.uid);
+      } else {
+        // User not logged in or has just logged out.
       }
     });
-
     this._lang.use('es');
   }
 

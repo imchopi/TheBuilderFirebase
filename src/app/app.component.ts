@@ -4,6 +4,7 @@ import { CustomTranslateService } from './core/services/translate/custom-transla
 import { AuthService } from './core/services/auth.service';
 import { FirebaseService } from './core/services/auth-firebase/auth-firebase.service';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,25 +14,10 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 export class AppComponent{
   
   constructor(
-    private _auth: FirebaseService,
+    private _auth: AuthService,
     private router: Router,
     public translate: CustomTranslateService,
     ) {
-      this.checkAuthentication();
-    }
+    }  
     
-    async checkAuthentication() {
-      try {
-        const user = await this._auth.me();
-        if (user) {
-          this.router.navigate(['/home']);
-        } else {
-          this.router.navigate(['/loading']);
-        }
-      } catch (error) {
-        console.error('Error al verificar la autenticación:', error);
-        // Aquí puedes manejar el error si es necesario
-      }
-    }
-
 }

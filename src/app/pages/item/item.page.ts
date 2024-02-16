@@ -6,6 +6,7 @@ import {
   Class,
   FullItem,
   Quality,
+  TestItem,
   Type,
 } from 'src/app/core/interfaces/build';
 import { BuildService } from 'src/app/core/services/build-info/build.service';
@@ -37,7 +38,7 @@ export class ItemPage implements OnInit {
     }
   }
 
-  async deleteItem(id: string | undefined) {
+  async deleteItem(id: string | undefined ) {
     if (id) {
       const alertItem = await this.alertController.create({
         header: this.translate.instant('other.header'),
@@ -48,9 +49,9 @@ export class ItemPage implements OnInit {
             text: this.translate.instant('other.okay'),
             handler: async () => {
               try {
-                await this.buildService.deleteItem(id);
-                // Actualizar la lista de builds después de eliminar uno
-                this.items = this.items.filter(item => item.idItem !== id);
+                  await this.buildService.deleteItem(id);
+                  this.items = this.items.filter(item => item.idItem !== id);
+
               } catch (error) {
                 console.error('Error al eliminar el item:', error);
                 // Manejar el error si es necesario

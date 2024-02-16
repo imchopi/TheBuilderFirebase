@@ -25,7 +25,7 @@ export class BuildFormPage implements OnInit {
   ngOnInit() {
   }
 
-  async onRegister(build: BuildPayload) {
+  async onRegister(build: Build) {
     try {
       await this.buildService.addBuild(build);
       this.router.navigate(['/build-info']);

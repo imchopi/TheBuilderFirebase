@@ -15,7 +15,7 @@
       </ion-label>
       <ion-item>
         <ion-select formControlName="className" placeholder="{{ 'formBuild.selectClass' | translate }}" aria-label="Select a Class">
-          <ion-select-option *ngFor="let class of selectedClasses" [value]="class">
+          <ion-select-option *ngFor="let class of selectedClasses" [value]="class.className">
             {{ class.className }}
           </ion-select-option>
         </ion-select>
@@ -25,7 +25,7 @@
       </ion-label>
       <ion-item>
         <ion-select formControlName="itemName" placeholder="{{ 'formBuild.selectItem' | translate }}" aria-label="Select an Item">
-          <ion-select-option *ngFor="let item of selectedItems" [value]="item">
+          <ion-select-option *ngFor="let item of selectedItems" [value]="item.itemName">
             {{ item.itemName }}
           </ion-select-option>
         </ion-select>

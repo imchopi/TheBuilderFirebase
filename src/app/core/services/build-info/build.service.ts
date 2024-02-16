@@ -10,6 +10,7 @@ import {
   Type,
 } from '../../interfaces/build';
 import {
+  DocumentReference,
   Firestore,
   addDoc,
   collection,
@@ -19,6 +20,7 @@ import {
   getDocs,
   getFirestore,
   query,
+  setDoc,
   updateDoc,
   where,
 } from 'firebase/firestore';
@@ -56,32 +58,34 @@ export class BuildService {
     const fullBuildSnapshot = await getDocs(fullBuild);
     const builds: Build[] = fullBuildSnapshot.docs.map((doc) => {
       const data = doc.data();
+      console.log('ESTA ES MI DATA: ', data);
+
       const buildData: Build = {
         userUid: data['userUid'],
         idBuild: data['idBuild'],
         buildName: data['buildName'],
         class: {
-          idClass: data['idClass'],
-          className: data['className'],
-          classImage: data['classImage'],
+          idClass: data['class']?.idClass,
+          className: data['class']?.className,
+          classImage: data['class']?.classImage,
         },
         fullItem: {
-          idItem: data['idItem'],
-          itemName: data['itemName'],
+          idItem: data['fullItem']?.idItem,
+          itemName: data['fullItem']?.itemName,
           quality: {
-            idQuality: data['idQuality'],
-            qualityName: data['qualityName'],
+            idQuality: data['fullItem']?.quality?.idQuality,
+            qualityName: data['fullItem']?.quality?.qualityName,
           },
           type: {
-            idType: data['idType'],
-            typeName: data['typeName'],
-          }
+            idType: data['fullItem']?.type?.idType,
+            typeName: data['fullItem']?.type?.typeName,
+          },
         },
       };
-      console.log("buildData" + buildData);
+      console.log('buildData', buildData.class?.className);
       return buildData;
     });
-    console.log("builds" + builds);
+    console.log('builds', builds);
     return builds;
   }
 
@@ -125,21 +129,21 @@ export class BuildService {
         idItem: data['idItem'],
         itemName: data['itemName'],
         quality: {
-          idQuality: data['idQuality'],
-          qualityName: data['qualityName'],
+          idQuality: data['quality']?.idQuality,
+          qualityName: data['quality']?.qualityName,
         },
         type: {
-          idType: data['idType'],
-          typeName: data['typeName'],
-        }
-      }
+          idType: data['type']?.idType,
+          typeName: data['type']?.typeName,
+        },
+      };
       return itemData;
     });
     return items;
   }
 
   async getBuildById(idBuild: string): Promise<Build | null> {
-    const buildRef = doc(this._db, 'buildRegister');
+    const buildRef = doc(this._db, 'buildRegister', idBuild);
     try {
       const buildDoc = await getDoc(buildRef);
 
@@ -150,21 +154,21 @@ export class BuildService {
           idBuild: data['idBuild'],
           buildName: data['buildName'],
           class: {
-            idClass: data['idClass'],
-            className: data['className'],
-            classImage: data['classImage'],
+            idClass: data['class']?.idClass,
+            className: data['class']?.className,
+            classImage: data['class']?.classImage,
           },
           fullItem: {
-            idItem: data['idItem'],
-            itemName: data['itemName'],
+            idItem: data['fullItem']?.idItem,
+            itemName: data['fullItem']?.itemName,
             quality: {
-              idQuality: data['idQuality'],
-              qualityName: data['qualityName'],
+              idQuality: data['fullItem']?.quality?.idQuality,
+              qualityName: data['fullItem']?.quality?.qualityName,
             },
             type: {
-              idType: data['idType'],
-              typeName: data['typeName'],
-            }
+              idType: data['fullItem']?.type?.idType,
+              typeName: data['fullItem']?.type?.typeName,
+            },
           },
         };
         return buildData;
@@ -180,9 +184,11 @@ export class BuildService {
 
   async getItemById(id: string): Promise<FullItem | null> {
     const itemRef = doc(this._db, 'items', id);
+    console.log(itemRef.id);
 
     try {
       const itemDoc = await getDoc(itemRef);
+      console.log(itemDoc.id);
 
       if (itemDoc.exists()) {
         const data = itemDoc.data();
@@ -190,14 +196,16 @@ export class BuildService {
           idItem: data['idItem'],
           itemName: data['itemName'],
           quality: {
-            idQuality: data['idQuality'],
-            qualityName: data['qualityName'],
+            idQuality: data['quality'].idQuality,
+            qualityName: data['quality'].qualityName,
           },
           type: {
-            idType: data['idType'],
-            typeName: data['typeName'],
-          }
-        }
+            idType: data['type'].idType,
+            typeName: data['type'].typeName,
+          },
+        };
+        console.log('PETO' + itemData);
+
         return itemData;
       } else {
         console.log('No se encontró un elemento con el ID proporcionado.');
@@ -252,26 +260,19 @@ export class BuildService {
     return qualities;
   }
 
-  async addBuild(build: BuildPayload) {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const buildWithUserUid = { ...build, userUid: user?.uid };
-    const docBuild = await addDoc(collection(this._db, 'buildRegister'),buildWithUserUid);
+  async addBuild(build: Build) {
+    const buildRegisterRef = collection(this._db, 'buildRegister');
+    const docBuild = await addDoc(buildRegisterRef, build);
+    build.idBuild = docBuild.id
+    await setDoc(docBuild, build)
+
   }
 
-  async addItem(item: TestItem) {
-    const newItem: TestItem = {
-      itemName: item.itemName,
-      qualityName: item.qualityName,
-      typeName: item.typeName
-    }
-    console.log(newItem);
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const docItem = await addDoc(
-      collection(this._db, 'items'),
-      newItem
-    );
+  async addItem(item: FullItem) {
+    const buildRegisterRef = collection(this._db, 'items');
+    const docRef = await addDoc(buildRegisterRef, item);
+    item.idItem = docRef.id;
+    await setDoc(docRef, item);
   }
 
   async updateBuild(
@@ -280,10 +281,7 @@ export class BuildService {
   ): Promise<void> {
     try {
       const itemRef = doc(this._db, 'buildRegister', itemId);
-
-      // Actualiza el documento con los nuevos datos
       await updateDoc(itemRef, updatedFields);
-
       console.log('Documento actualizado correctamente');
     } catch (error) {
       console.error('Error al actualizar el documento:', error);
@@ -291,16 +289,22 @@ export class BuildService {
     }
   }
 
-  async updateItem(
-    itemId: string,
-    updatedFields: Partial<FullItem>
-  ): Promise<void> {
+  async updateItem(itemId: string, item: FullItem) {
     try {
       const itemRef = doc(this._db, 'items', itemId);
-
-      // Actualiza el documento con los nuevos datos
-      await updateDoc(itemRef, updatedFields);
-
+      const updatedItem = { 
+        ...item, 
+        idItem: itemId,
+        quality: {
+            ...item.quality,
+            idQuality: item.quality.idQuality
+        },
+        type: {
+            ...item.type,
+            idType: item.type.idType
+        }
+    };
+      await setDoc(itemRef, updatedItem);
       console.log('Documento actualizado correctamente');
     } catch (error) {
       console.error('Error al actualizar el documento:', error);
@@ -313,8 +317,10 @@ export class BuildService {
     await deleteDoc(build);
   }
 
-  async deleteItem(id: string) {
-    const item = doc(this._db, 'items', id);
-    await deleteDoc(item);
+  async deleteItem(id: string | undefined) {
+    if (id) {
+      const item = doc(this._db, 'items', id);
+      await deleteDoc(item);
+    }
   }
 }

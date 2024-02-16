@@ -21,69 +21,138 @@ import { FirebaseService } from 'src/app/core/services/auth-firebase/auth-fireba
 export class BuildFormAddComponent /*implements OnInit*/ {
   @Input() builds: Build | null = null;
   @Output() onCardClicked: EventEmitter<void> = new EventEmitter<void>();
-  @Output() onRegister = new EventEmitter<BuildPayload>();
+  @Output() onRegister = new EventEmitter<Build>();
 
   form: FormGroup;
   mode = false;
+
   buildName: string | null = null;
   className: string | null = null;
   itemName: string | null = null;
+
   selectedClasses: Class[] | null = null;
   selectedItems: FullItem[] | null = null;
   buildId: string | null = null;
-  user: UserInfo | undefined = undefined;
+
   showMaxLengthError: boolean = false;
 
-  building: Build[] | null = null
+  building: Build[] | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private buildService: BuildService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private firebaseSvc: FirebaseService
   ) {
     this.form = this.formBuilder.group({
       buildName: [null, Validators.required],
       className: [null, Validators.required],
-      itemName: [null, Validators.required]
-    })
+      itemName: [null, Validators.required],
+    });
   }
 
   async ngOnInit() {
-    const classes = await this.buildService.getClass()
+    const classes = await this.buildService.getClass();
     this.selectedClasses = classes;
 
     const items = await this.buildService.getItems();
     this.selectedItems = items;
+
+    this.activatedRoute.paramMap.subscribe(async (paramMap) => {
+      const buildIdParam = paramMap.get('buildId');
+      if (buildIdParam) {
+        this.mode = true;
+        this.buildId = buildIdParam;
+        console.log('id del item: ' + this.buildId);
+
+        // Obtener los datos del ítem
+        const build = await this.buildService.getBuildById(buildIdParam);
+
+        // Asignar los valores del ítem al formulario
+        if (build) {
+          // Asignar los valores del ítem al formulario
+          this.form.patchValue({
+            buildName: build.buildName,
+            className: build.class.className,
+            itemName: build.fullItem.itemName,
+          });
+        }
+      }
+    });
   }
 
   async onRegisterBuild() {
     if (this.form && this.form.valid) {
-      const buildData: BuildPayload = {
-        buildName: this.form.get('buildName')?.value,
-        class: this.form.get('className')?.value,
-        fullItem: this.form.get('itemName')?.value
-      };
-      console.log(buildData);
-      this.buildService.addBuild(buildData)
+      const buildName = this.form.get('buildName')?.value;
+      const classSel =  this.selectedClasses?.find(
+        (classData) => classData.className === this.form.get('className')?.value
+      );
+      const itemSel = this.selectedItems?.find(
+        (item) => item.itemName === this.form.get('itemName')?.value
+      );
+
+      if (classSel && itemSel) {
+        const buildData: Build = {
+          userUid: this.firebaseSvc.currentUserId(),
+          buildName: buildName || '',
+          class: {
+            className: classSel.className,
+            classImage: classSel.classImage,
+          },
+          fullItem: {
+            itemName: itemSel.itemName,
+            type: {
+              idType: itemSel.type.idType || '',
+              typeName: itemSel.type.typeName,
+            },
+            quality: {
+              idQuality: itemSel.quality.idQuality || '',
+              qualityName: itemSel.quality.qualityName,
+            },
+          },
+        };
+
+        console.log('Datos de construcción:', buildData);
+        this.onRegister.emit(buildData);
+        return buildData;
+      } else {
+        console.log('No se encontró la clase o el ítem seleccionado.');
+      }
+    } else {
+      console.log('El formulario no es válido.');
     }
+    return null;
   }
 
   async updateBuild() {
     if (this.form && this.form.valid && this.buildId !== null) {
-      const buildData: Partial<Build> = {
-        buildName: this.form.get('buildname')?.value,
-        class: this.form.get('selectedClasses')?.value,
-        fullItem: this.form.get('selectedItems')?.value,
-        // Asumiendo que user es una propiedad de tu componente que contiene la información del usuario actual
-        userUid: this.user?.uid,
-      };
-      
-      try {
+      const buildName = this.form.get('buildName')?.value;
+      const classSel = this.selectedClasses?.find(
+        (classInfo) => classInfo.className === this.form.get('className')?.value
+      );
+      const itemSel = this.selectedItems?.find(
+        (item) => item.itemName === this.form.get('itemName')?.value
+      );
+      if (classSel && itemSel) {
+        const buildData: Build = {
+          userUid: this.firebaseSvc.currentUserId(),
+          buildName: buildName || '',
+          class: classSel,
+          fullItem: {
+            itemName: itemSel.itemName,
+            type: {
+              idType: itemSel.type.idType || '',
+              typeName: itemSel.type.typeName,
+            },
+            quality: {
+              idQuality: itemSel.quality.idQuality || '',
+              qualityName: itemSel.quality.qualityName,
+            },
+          },
+        };
         await this.buildService.updateBuild(this.buildId, buildData);
         this.router.navigate(['/build-info']);
-      } catch (error) {
-        console.error('Error al actualizar el build:', error);
-        // Manejar el error si es necesario
       }
     }
   }

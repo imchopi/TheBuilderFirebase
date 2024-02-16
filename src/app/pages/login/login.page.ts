@@ -12,9 +12,9 @@ import { FirebaseService } from 'src/app/core/services/auth-firebase/auth-fireba
 })
 export class LoginPage implements OnInit {
   private redirectUrl:string = ""
-  constructor(private auth: FirebaseService, private router: Router, private route:ActivatedRoute) {}
+  constructor(private auth: FirebaseService, private router: Router, private route:ActivatedRoute, private authSvc: AuthService) {}
   ngOnInit() {
-    this.redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl')??"/home";
+
   }
 
   async login(credentials: UserCredentials) {

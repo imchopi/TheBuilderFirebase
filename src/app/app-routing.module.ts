@@ -26,42 +26,60 @@ const routes: Routes = [
   },
   {
     path: 'build-info',
-    loadChildren: () => import('./pages/build-info/build-info.module').then( m => m.BuildInfoPageModule),
-    /*canActivate: [AuthGuard],*/
+    loadChildren: () =>
+      import('./pages/build-info/build-info.module').then(
+        (m) => m.BuildInfoPageModule
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'item',
-    loadChildren: () => import('./pages/item/item.module').then( m => m.ItemPageModule),
-    /*canActivate: [AuthGuard],*/
+    loadChildren: () =>
+      import('./pages/item/item.module').then((m) => m.ItemPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'about',
-    loadChildren: () => import('./pages/about/about.module').then( m => m.AboutPageModule),
-    /*canActivate: [AuthGuard],*/
+    loadChildren: () =>
+      import('./pages/about/about.module').then((m) => m.AboutPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'build-form',
-    loadChildren: () => import('./pages/build-form/build-form.module').then( m => m.BuildFormPageModule),
-    /*canActivate: [AuthGuard],*/
+    loadChildren: () =>
+      import('./pages/build-form/build-form.module').then(
+        (m) => m.BuildFormPageModule
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'build/update/:buildId',
-    loadChildren: () => import('./pages/build-form/build-form.module').then( m => m.BuildFormPageModule),
-    /*canActivate: [AuthGuard],*/
+    loadChildren: () =>
+      import('./pages/build-form/build-form.module').then(
+        (m) => m.BuildFormPageModule
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'item-form',
-    loadChildren: () => import('./pages/item-form/item-form/item-form.module').then( m => m.ItemFormPageModule),
-    /*canActivate: [AuthGuard],*/
+    loadChildren: () =>
+      import('./pages/item-form/item-form/item-form.module').then(
+        (m) => m.ItemFormPageModule
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'item/update/:itemId',
-    loadChildren: () => import('./pages/item-form/item-form/item-form.module').then( m => m.ItemFormPageModule),
-    /*canActivate: [AuthGuard],*/
+    loadChildren: () =>
+      import('./pages/item-form/item-form/item-form.module').then(
+        (m) => m.ItemFormPageModule
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'loading',
-    loadChildren: () => import('./pages/loading/loading.module').then( m => m.LoadingPageModule),
+    loadChildren: () =>
+      import('./pages/loading/loading.module').then((m) => m.LoadingPageModule),
   },
 ];
 

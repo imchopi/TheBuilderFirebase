@@ -3,10 +3,17 @@ import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { BuildService } from 'src/app/core/services/build-info/build.service';
-import { Build, Class, FullItem, Quality, Type } from 'src/app/core/interfaces/build';
-import { UserInfo } from 'src/app/core/interfaces/user'
+import {
+  Build,
+  Class,
+  FullItem,
+  Quality,
+  Type,
+} from 'src/app/core/interfaces/build';
+import { UserInfo } from 'src/app/core/interfaces/user';
 import { deleteDoc } from 'firebase/firestore';
 import { FirebaseService } from 'src/app/core/services/auth-firebase/auth-firebase.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-build-info',
@@ -18,7 +25,8 @@ export class BuildInfoPage implements OnInit {
     private buildService: BuildService,
     private authSvc: FirebaseService,
     private alertController: AlertController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private sanitizer: DomSanitizer
   ) {}
 
   user: UserInfo | null | undefined = null;
@@ -27,14 +35,17 @@ export class BuildInfoPage implements OnInit {
   classes: Class[] | null = null;
   types: Type[] | null = null;
   qualities: Quality[] | null = null;
+  imageUrl: SafeUrl | undefined
 
   async ngOnInit() {
-    this.builds = await this.buildService.getAll()
+    const dynamicImageUrl = 'build.class.classImage';
+    this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(dynamicImageUrl);
+    this.builds = await this.buildService.getAll();
   }
 
   async ionViewWillEnter() {
     this.user = await this.authSvc.me();
-    this.builds = await this.buildService.getAllBuildByUser(this.user?.uid);
+    this.builds = await this.buildService.getAll();
   }
 
   async deleteBuild(id: string | undefined) {
@@ -51,14 +62,16 @@ export class BuildInfoPage implements OnInit {
                 try {
                   await this.buildService.deleteBuild(id);
                   // Actualizar la lista de builds después de eliminar uno
-                  this.builds = this.builds.filter(build => build.idBuild !== id);
+                  this.builds = this.builds.filter(
+                    (build) => build.idBuild !== id
+                  );
                 } catch (error) {
                   console.error('Error al eliminar el build:', error);
                   // Manejar el error si es necesario
                 }
               },
             },
-            this.translate.instant('other.cancel')
+            this.translate.instant('other.cancel'),
           ],
         });
         await alertBuild.present();

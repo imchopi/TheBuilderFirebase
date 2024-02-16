@@ -1,14 +1,14 @@
 export interface BuildPayload {
-  userUid?: string,
   idBuild?: string;
+  userUid: string;
   buildName: string;
   class: string;
   fullItem: string;
 }
 
 export interface Build {
-  userUid?: string;
   idBuild?: string;
+  userUid?: string;
   buildName: string;
   class: Class;
   fullItem: FullItem;
