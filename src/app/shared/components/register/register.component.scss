@@ -8,7 +8,8 @@ form {
   
   /* Estilo para los inputs */
   ion-input {
-    margin-bottom: 10px;
+    margin-top: -5px;
+    margin-bottom: 5px;
   }
   
   /* Estilo para el mensaje de error */
@@ -17,6 +18,12 @@ form {
     margin-top: 5px;
     font-size: 12px;
   }
+
+  ion-item{
+    color: white;
+    margin: 5px;
+  }
+
 /* Estilo para los botones */
 ion-button {
     width: 100%;
