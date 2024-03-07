@@ -11,9 +11,10 @@ import {
   Type,
 } from 'src/app/core/interfaces/build';
 import { UserInfo } from 'src/app/core/interfaces/user';
-import { deleteDoc } from 'firebase/firestore';
+import { Unsubscribe, deleteDoc } from 'firebase/firestore';
 import { FirebaseService } from 'src/app/core/services/auth-firebase/auth-firebase.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-build-info',
@@ -21,13 +22,23 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   styleUrls: ['./build-info.page.scss'],
 })
 export class BuildInfoPage implements OnInit {
+  private _builds = new BehaviorSubject<Build[]>([]);
+  public builds$ = this._builds.asObservable();
+  private unSbc: Unsubscribe | null = null;
+
   constructor(
     private buildService: BuildService,
     private authSvc: FirebaseService,
     private alertController: AlertController,
     private translate: TranslateService,
     private sanitizer: DomSanitizer
-  ) {}
+  ) {
+    this.unSbc = this.buildService.subscribeToCollection(
+      'buildRegister',
+      this._builds,
+      buildService.mapBuilds
+    );
+  }
 
   user: UserInfo | null | undefined = null;
   builds: Build[] = [];
@@ -35,17 +46,15 @@ export class BuildInfoPage implements OnInit {
   classes: Class[] | null = null;
   types: Type[] | null = null;
   qualities: Quality[] | null = null;
-  imageUrl: SafeUrl | undefined
+  imageUrl: SafeUrl | undefined;
 
   async ngOnInit() {
     const dynamicImageUrl = 'build.class.classImage';
     this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(dynamicImageUrl);
-    this.builds = await this.buildService.getAll();
   }
 
   async ionViewWillEnter() {
     this.user = await this.authSvc.me();
-    this.builds = await this.buildService.getAll();
   }
 
   async deleteBuild(id: string | undefined) {

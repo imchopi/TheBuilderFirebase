@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
   <div class="flex">
-  <ion-card *ngFor="let item of items">
+  <ion-card *ngFor="let item of items$ | async">
     <div class="card-content">
     <ion-card-content>
       <ion-card-title class="custom-item-name" appyellow>{{item.itemName | uppercase}}</ion-card-title>

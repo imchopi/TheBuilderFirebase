@@ -1,5 +1,5 @@
 <form *ngIf="form" [formGroup]="form" (ngSubmit)="onLogin()">
-  <ion-item color="red" >
+  <ion-item  color="primary" lines="none" >
     <ion-input
     label="{{ 'login.user' | translate }}"
     labelPlacement="stacked"
@@ -7,7 +7,7 @@
     formControlName="email"
   />
   </ion-item>
-  <ion-item color="red" >
+  <ion-item  color="primary" lines="none" >
     <ion-input
     class="custon-input"
     label="{{ 'login.password' | translate }}"

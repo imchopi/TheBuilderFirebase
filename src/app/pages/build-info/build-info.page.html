@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
   <div class="flex">
-    <ion-card class="card-about" *ngFor="let build of builds">
+    <ion-card class="card-about" *ngFor="let build of builds$ | async">
       <div class="card-content">
         <ion-card-header class="card-header">
           <div class="avatar-img">

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Observable, from, map, mergeMap } from 'rxjs';
+import { BehaviorSubject, Observable, from, map, mergeMap } from 'rxjs';
 import {
   Build,
   BuildPayload,
@@ -12,6 +12,7 @@ import {
 import {
   DocumentReference,
   Firestore,
+  Unsubscribe,
   addDoc,
   collection,
   deleteDoc,
@@ -19,6 +20,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  onSnapshot,
   query,
   setDoc,
   updateDoc,
@@ -33,7 +35,7 @@ import {
   UserCredential,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
-import { UserInfo } from '../../interfaces/user';
+import { FirebaseDocument, UserInfo } from '../../interfaces/user';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +49,67 @@ export class BuildService {
     this._app = initializeApp(config);
     this._db = getFirestore(this._app);
     this._auth = getAuth(this._app);
+  }
+
+  mapItems(el: FirebaseDocument): FullItem {
+    return {
+      idItem: el.data['idItem'],
+      itemName: el.data['itemName'],
+      quality: {
+        idQuality: el.data['quality']?.idQuality,
+        qualityName: el.data['quality']?.qualityName,
+      },
+      type: {
+        idType: el.data['type']?.idType,
+        typeName: el.data['type']?.typeName,
+      },
+    };
+  }
+
+  mapBuilds(el: FirebaseDocument): Build {
+    return {
+      userUid: el.data['userUid'],
+      idBuild: el.data['idBuild'],
+      buildName: el.data['buildName'],
+      class: {
+        idClass: el.data['class']?.idClass,
+        className: el.data['class']?.className,
+        classImage: el.data['class']?.classImage,
+      },
+      fullItem: {
+        idItem: el.data['fullItem']?.idItem,
+        itemName: el.data['fullItem']?.itemName,
+        quality: {
+          idQuality: el.data['fullItem']?.quality?.idQuality,
+          qualityName: el.data['fullItem']?.quality?.qualityName,
+        },
+        type: {
+          idType: el.data['fullItem']?.type?.idType,
+          typeName: el.data['fullItem']?.type?.typeName,
+        },
+      },
+    };
+  }
+
+  public subscribeToCollection(
+    collectionName: string,
+    subject: BehaviorSubject<any[]>,
+    mapFunction: (el: FirebaseDocument) => any
+  ): Unsubscribe | null {
+    if (!this._db) return null;
+    return onSnapshot(
+      collection(this._db, collectionName),
+      (snapshot) => {
+        subject.next(
+          snapshot.docs
+            .map<FirebaseDocument>((doc) => {
+              return { id: doc.id, data: doc.data() };
+            })
+            .map(mapFunction)
+        );
+      },
+      (error) => {}
+    );
   }
 
   async init() {
@@ -263,14 +326,13 @@ export class BuildService {
   async addBuild(build: Build) {
     const buildRegisterRef = collection(this._db, 'buildRegister');
     const docBuild = await addDoc(buildRegisterRef, build);
-    build.idBuild = docBuild.id
-    await setDoc(docBuild, build)
-
+    build.idBuild = docBuild.id;
+    await setDoc(docBuild, build);
   }
 
   async addItem(item: FullItem) {
-    const buildRegisterRef = collection(this._db, 'items');
-    const docRef = await addDoc(buildRegisterRef, item);
+    const itemsRef = collection(this._db, 'items');
+    const docRef = await addDoc(itemsRef, item);
     item.idItem = docRef.id;
     await setDoc(docRef, item);
   }
@@ -292,18 +354,18 @@ export class BuildService {
   async updateItem(itemId: string, item: FullItem) {
     try {
       const itemRef = doc(this._db, 'items', itemId);
-      const updatedItem = { 
-        ...item, 
+      const updatedItem = {
+        ...item,
         idItem: itemId,
         quality: {
-            ...item.quality,
-            idQuality: item.quality.idQuality
+          ...item.quality,
+          idQuality: item.quality.idQuality,
         },
         type: {
-            ...item.type,
-            idType: item.type.idType
-        }
-    };
+          ...item.type,
+          idType: item.type.idType,
+        },
+      };
       await setDoc(itemRef, updatedItem);
       console.log('Documento actualizado correctamente');
     } catch (error) {

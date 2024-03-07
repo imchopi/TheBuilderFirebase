@@ -54,8 +54,6 @@ export class FirebaseService{
   }
 
   async login(userCredential: UserCredentials) {
-    console.log(userCredential);
-
     await signInWithEmailAndPassword(
       this._auth,
       userCredential.email,

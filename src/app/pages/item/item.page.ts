@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { Unsubscribe } from 'firebase/firestore';
+import { BehaviorSubject } from 'rxjs';
 import {
   Build,
   Class,
@@ -16,27 +18,24 @@ import { BuildService } from 'src/app/core/services/build-info/build.service';
   templateUrl: './item.page.html',
   styleUrls: ['./item.page.scss'],
 })
-export class ItemPage implements OnInit {
+export class ItemPage{
+  private _items = new BehaviorSubject<FullItem[]>([]);
+  public items$ = this._items.asObservable();
+  private unSbc: Unsubscribe | null = null;
+
   constructor(
     private buildService: BuildService,
     private alertController: AlertController,
     private translate: TranslateService
-  ) {}
+  ) {
+    this.unSbc = this.buildService.subscribeToCollection(
+      'items',
+      this._items,
+      buildService.mapItems
+    );
+  }
 
   items: FullItem[] = [];
-
-  async ngOnInit() {
-    this.items = await this.buildService.getItems();
-  }
-
-  async ionViewWillEnter() {
-    try {
-      this.items = await this.buildService.getItems();
-    } catch (error) {
-      console.error('Error al obtener datos:', error);
-      // Manejar el error si es necesario
-    }
-  }
 
   async deleteItem(id: string | undefined ) {
     if (id) {

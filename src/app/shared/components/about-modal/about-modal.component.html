@@ -24,12 +24,8 @@
     </ion-card-content>
 
     <div class="button-container">
-      <a href="https://www.linkedin.com/in/aperogil/" target="_blank" rel="noopener noreferrer">
-        <ion-button fill="outline" color="danger">Linkedin</ion-button>
-      </a>
-      <a href="https://github.com/imchopi" target="_blank" rel="noopener noreferrer">
-        <ion-button fill="outline" color="danger">Github</ion-button>
-      </a>
+      <ion-button (click)="openUrl('https://www.linkedin.com/in/aperogil/')" fill="outline" color="danger">Linkedin</ion-button>
+      <ion-button (click)="openUrl('https://github.com/imchopi')" fill="outline" color="danger">Github</ion-button>
     </div>
   </ion-card>
 </ion-content>

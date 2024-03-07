@@ -1,22 +1,20 @@
 /* Estilo general para el formulario */
 form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px;
-  }
-
-  ion-label{
-    font-size: 1.5em;
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin: auto;
   }
 
   /* Estilo para los inputs */
   ion-input {
-    width: 100%;
-    max-width: 300px;
-    margin-bottom: 15px;
-    font-size: 1.3em;
-    --highlight-color-focused: #8b0000; /* Rojo oscuro para el borde enfocado */
+    margin-top: -5px;
+    margin-bottom: 5px;
+  }
+
+  ion-item{
+    color: white;
+    margin: 5px;
   }
   
   /* Estilo para los botones */
